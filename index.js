@@ -17,6 +17,7 @@ const query = `
 
 class GeoJSONSource {
   constructor(uri, callback){
+    console.error("uri is: ", uri);
     uri.protocol = "http:"
     request({
       url: uri,
