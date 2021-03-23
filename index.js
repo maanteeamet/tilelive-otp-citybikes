@@ -17,7 +17,6 @@ const query = `
 
 class GeoJSONSource {
   constructor(uri, callback){
-    console.error("uri is: ", uri);
     uri.protocol = "http:"
     request({
       url: uri,
@@ -55,29 +54,19 @@ class GeoJSONSource {
   };
 
   getTile(z, x, y, callback){
-    console.log("Tile z is: ", z);
-    console.log("Tile x is: ", x);
-    console.log("Tile y is: ", y);
     let tile = this.tileIndex.getTile(z, x, y)
-
-    console.log("Tile loaded: ", tile)
-
     if (tile === null){
-      console.log("Tile is null!!")
       tile = {features: []}
     }
 
     const data = Buffer.from(vtPbf.fromGeojsonVt({stations: tile}));
-    console.log("Data is: ", data);
 
     zlib.gzip(data, function (err, buffer) {
       if (err){
-        console.log("Error! ", err)
         callback(err);
         return;
       }
 
-      console.log("Buffer is: ", buffer);
       callback(null, buffer, {"content-encoding": "gzip"})
     })
   }
